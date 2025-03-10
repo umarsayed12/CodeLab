@@ -27,7 +27,7 @@ const LoginPage = () => {
     const url = "http://localhost:5000/user/login";
 
     axios
-      .post(url, user)
+      .post(url, user, { withCredentials: true })
       .then((response) => {
         if (response.data.status === "warning") {
           showWarningToast(response.data.message);

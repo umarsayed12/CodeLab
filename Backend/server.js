@@ -23,9 +23,10 @@ connectMongoDB(process.env.MONGO_URL).then((result) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({
-  origin: "*", // Allow frontend URL
-  credentials: true, // Allow cookies
+  origin: "http://localhost:5173",
+  credentials: true,
 }));
+
 
 // const io = new Server(server, {
 //   cors: {
@@ -40,20 +41,23 @@ app.use(cors({
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
-// const {
-//   checkForAuthenticationCookie,
-// } = require("./middlewares/authentication.js");
+
 
 //MIDDLEWARES
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Serve static files (CSS and JS)  
- // this means every request on this server : http://localhost:5000/public/upload is changes into http://localhost:5000/uploadand
-  // and  all request on this path is treated staticlly
+// this means every request on this server : http://localhost:5000/public/upload is changes into http://localhost:5000/uploadand
+// and  all request on this path is treated staticlly
 app.use(express.static(path.join(__dirname ,'./public')));  
 // Serve static files for uploaded images
 
-// app.use(checkForAuthenticationCookie("token"));
+//check that user has cookie stored or not 
+const {
+  checkForAuthenticationCookie,
+} = require("./middlewares/authentication.js");
+
+app.use(checkForAuthenticationCookie("token"));
 
 //Adding routers
 

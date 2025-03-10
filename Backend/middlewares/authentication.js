@@ -1,28 +1,32 @@
 const { validateToken } = require("../services/authentication");
 
+
 function checkForAuthenticationCookie(cookieName) {
   return (req, res, next) => {
-      console.log("Checking cookie:", cookieName);  // Should show "token"
-      const tokenCookieValue = req.cookies[cookieName];
-      console.log("Cookie value exists:", !!tokenCookieValue);
-      
-      if (!tokenCookieValue) {
-          req.user = null;
-          return next();//now request user vairable has only undeifnd or null value 
-      }
+    console.log("Checking cookie:", cookieName);
 
-      try {
-          const userPayload = validateToken(tokenCookieValue);
-          console.log('Cookie received:', req.cookies.token);
-          console.log("Valid user found:", userPayload.email);
-          req.user = userPayload;//now request  have these user vairable details
-      } catch (error) {
-          console.log("Token validation failed:", error.message);
-          req.user = null;
-      }
+    const tokenCookieValue = req.cookies[cookieName];
+
+    if (!tokenCookieValue) {
+      console.log("No authentication cookie found.");
+      req.user = null;
       return next();
+    }
+
+    try {
+      const userPayload = validateToken(tokenCookieValue);
+      console.log("Valid user found:", userPayload);
+      req.user = userPayload; // Attach user info to request
+    } catch (error) {
+      console.log("Token validation failed:", error.message);
+      req.user = null;
+    }
+    return next();
   };
 }
+
+module.exports = checkForAuthenticationCookie;
+
 
 
 // Add a protected route middleware
