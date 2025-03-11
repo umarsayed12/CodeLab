@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Header, Footer } from "../components";
+import { Header, Footer , LoadingScreen} from "../components";
 import { useSelector } from "react-redux";
 import { UserPlus, Eye, EyeOff } from "lucide-react";
 import { showErrorToast, showSuccessToast, showWarningToast } from "../util.js/toast";
 import axios from "axios";
-
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -16,7 +15,7 @@ const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [profilePreview, setProfilePreview] = useState(null);
-  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const darkMode = useSelector((state) => state.theme.darkMode);
 
   const toggleShowPassword = () => {
@@ -39,6 +38,7 @@ const SignupPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
   
     try {
       const formData = new FormData();
@@ -46,39 +46,45 @@ const SignupPage = () => {
       formData.append("email", email);
       formData.append("password", password);
       if (profileImage) {
-        formData.append("profileImage", profileImage); // Append actual file , we use formdata beacuse in this way we can send text nad object by wrapinng in it 
+        formData.append("profileImage", profileImage);
       }
       const url = "http://localhost:5000/user/signup";
       
-      
-       // ✅ Send POST request using FormData
-    const response = await axios.post(url, formData, {
-      headers: { "Content-Type": "multipart/form-data" }, //this is nessary to send the this like this when we are sending file in request 
-    });
+      const response = await axios.post(url, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       console.log("After Fetching in repsonse Query : Frontend");
   
-      // ✅ Handle Response Based on Status
       if (response.data.status === "warning") {
-        showWarningToast(response.data.message); // ⚠ Show warning toast
+        showWarningToast(response.data.message);
+        setIsLoading(false);
         return;
       }
   
       if (response.data.status === "error") {
-        showErrorToast(response.data.message); // ❌ Show error toast
+        showErrorToast(response.data.message);
+        setIsLoading(false);
         return;
       }
   
-      // ✅ Success Case
-      showSuccessToast(response.data.message); // 🎉 Show success toast
-      navigate("/login"); // 🔄 Redirect to login page
+      showSuccessToast(response.data.message);
+      setIsLoading(false);
+      navigate("/login");
   
     } catch (err) {
-      // ❌ Handle Network or Server Errors
       showErrorToast(err.response?.data?.message || "Something went wrong!");
+      setIsLoading(false);
     }
   };
   
+  // Use the LoadingScreen component when loading
+  if (isLoading) {
+    return <LoadingScreen 
+      title="Creating Account" 
+      message="Please wait while we process your registration..." 
+    />;
+  }
 
   return (
     <div className={`min-h-screen flex flex-col transition-all ${
@@ -132,24 +138,7 @@ const SignupPage = () => {
             Create Account
           </motion.p>
 
-          {/* Animated Error Message */}
-          {/*
-          <AnimatePresence>
-            {error && (
-              <motion.p
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="text-red-500 text-center font-semibold mt-1 text-sm"
-              >
-                {error}
-              </motion.p>
-            )}
-          </AnimatePresence>
-          */}
-
           <form onSubmit={handleSubmit} className="mt-4 flex flex-col space-y-4" encType="multipart/form-data">
-          {/* <form onSubmit={handleSubmit} className="mt-4 flex flex-col space-y-4" > */}
             <input
               type="text"
               placeholder="Full Name"

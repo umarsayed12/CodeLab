@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Copy, Check, X } from "lucide-react";
-import { Header, Footer } from "../components";
+import { Header, Footer , LoadingScreen } from "../components";
 
 const HostPage = () => {
-  const  isAuthenticated  = useSelector((state) => state.auth.isAuth);
+  const isAuthenticated = useSelector((state) => state.auth.isAuth);
+  const isLoading = useSelector((state) => state.auth.isLoading);
   const navigate = useNavigate();
   const [meetingName, setMeetingName] = useState("");
   const [hostName, setHostName] = useState("");
@@ -16,12 +17,12 @@ const HostPage = () => {
   const darkMode = useSelector((state) => state.theme.darkMode);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && !isLoading) {
       setTimeout(() => {
         navigate("/login");
       }, 3000);
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, isLoading, navigate]);
 
   const generateRoomId = () => {
     if (!meetingName.trim() || !hostName.trim()) {
@@ -55,6 +56,15 @@ const HostPage = () => {
     setter(e.target.value);
     if (error) setError("");
   };
+
+  // Loading state
+  if (isLoading) {
+    return <LoadingScreen 
+      title="Loading" 
+      message="Verifying your credentials..." 
+    />;
+  }
+
 
   // Prevent accessing setup if not authenticated
   if (!isAuthenticated) {

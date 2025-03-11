@@ -5,5 +5,15 @@ import ParticipantsList from "./ParticipantsList";
 import ProfilePanel from "./ProfilePanel";
 import HomeContent from "./HomeContent";
 import ThemeButton from "./ThemeButton";
+import LoadingScreen from "./LoadingScreen";
+import AccessDeniedScreen from "./AccessDenied";
+import ChatMessages from "./ChatMessages";
+import ControlBar from "./ControlBar";
+import ControlBarButton from "./ControlBarButton";
+import EscNotification from "./ESCNotification";
+import Sidebar from "./sideBar";
+import ShareLinkPopup from "./ShareLinkPopup";
 
-export { CodeEditor, Footer, Header, ParticipantsList, ProfilePanel, HomeContent, ThemeButton };
+
+export { CodeEditor, Footer, Header, ParticipantsList, ProfilePanel, HomeContent, ThemeButton , LoadingScreen, AccessDeniedScreen , 
+    ChatMessages , ControlBar , ControlBarButton, EscNotification , Sidebar , ShareLinkPopup};

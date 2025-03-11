@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Header, Footer } from "../components";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Header, Footer , LoadingScreen} from "../components";
 import { useSelector, useDispatch } from "react-redux";
 import { LogIn, Eye, EyeOff } from "lucide-react";
 import axios from "axios";
@@ -15,20 +15,32 @@ import { login } from "../redux/authSlice";
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const location = useLocation();
+  
+  // Add loading state
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const darkMode = useSelector((state) => state.theme.darkMode);
 
+  useEffect(() => {
+    // Check if there's a redirect message from another page
+    if (location.state?.message) {
+      showWarningToast(location.state.message);
+    }
+  }, [location]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const user = { email, password };
     const url = "http://localhost:5000/user/login";
 
     axios
       .post(url, user, { withCredentials: true })
       .then((response) => {
+        setIsLoading(false);
         if (response.data.status === "warning") {
           showWarningToast(response.data.message);
         } else if (response.data.status === "error") {
@@ -36,13 +48,29 @@ const LoginPage = () => {
         } else if (response.data.status === "success") {
           showSuccessToast(response.data.message);
           dispatch(login(response.data.user));
-          navigate("/");
+          
+          // Check if there's a redirect destination
+          if (location.state?.redirectFrom) {
+            navigate(location.state.redirectFrom);
+          } else {
+            navigate("/");
+          }
         }
       })
       .catch((err) => {
+        setIsLoading(false);
         showErrorToast(err.response?.data?.message || "Something went wrong!");
       });
   };
+
+  // Loading Screen Component
+  if (isLoading) {
+    return <LoadingScreen 
+      title="Logging in" 
+      message="Please wait while we Authenticating you..." 
+    />;
+  }
+
 
   return (
     <div

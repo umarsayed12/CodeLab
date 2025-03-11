@@ -2,24 +2,25 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Header, Footer } from "../components";
+import { Header, Footer , LoadingScreen} from "../components";
 import { X } from "lucide-react";
-import {showErrorToast,showSuccessToast,showWarningToast} from "../util.js/toast";
+import { showErrorToast, showSuccessToast, showWarningToast } from "../util.js/toast";
 
 const JoinPage = () => {
-  const isAuthenticated  = useSelector((state) => state.auth.isAuth);
+  const isAuthenticated = useSelector((state) => state.auth.isAuth);
+  const isLoading = useSelector((state) => state.auth.isLoading);
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState("");
-  const [error, setError] = useState(""); // Error state
+  const [error, setError] = useState("");
   const darkMode = useSelector((state) => state.theme.darkMode);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isLoading && !isAuthenticated) {
       setTimeout(() => {
         navigate("/login");
       }, 3000);
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, isLoading, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,17 +28,24 @@ const JoinPage = () => {
       setError("⚠ Room ID is required!");
       return;
     }
-    setError(""); // Clear error if valid
+    setError(""); 
     navigate(`/room/setup`);
   };
 
-  // Function to handle input change and clear error simultaneously
   const handleInputChange = (e) => {
     setRoomId(e.target.value);
-    if (error) setError(""); // Remove error as soon as user types
+    if (error) setError("");
   };
 
-  // Prevent accessing setup if not authenticated
+  // Enhanced Loading State - Matching HostPage
+  if (isLoading) {
+    return <LoadingScreen 
+      title="Loading" 
+      message="Verifying your credentials..." 
+    />;
+  }
+
+  // ❌ Access Denied UI if NOT Authenticated
   if (!isAuthenticated) {
     return (
       <div className={`min-h-screen flex flex-col items-center justify-center transition-all ${
@@ -114,7 +122,7 @@ const JoinPage = () => {
           </motion.p>
 
           <form onSubmit={handleSubmit} className="mt-6 flex flex-col space-y-4">
-            {/* Input Field - Removed visible box */}
+            {/* Input Field */}
             <div className="relative w-full">
               <input
                 type="text"

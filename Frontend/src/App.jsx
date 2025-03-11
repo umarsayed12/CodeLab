@@ -2,23 +2,15 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import axios from "axios";
-import { login } from "./redux/authSlice"; // Import Redux action
 import { HomePage, HostPage, JoinPage, LoginPage, SignupPage, SetupPage, RoomPage } from "./pages";
+import { checkAuth } from "./redux/authSlice";
 
 const App = () => {
-  const dispatch = useDispatch(); // ✅ Use dispatch from Redux
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/user/current-user", { withCredentials: true })
-      .then((response) => {
-        if (response.data.success) {
-          dispatch(login(response.data.user)); // ✅ Save user in Redux
-        }
-      })
-      .catch((err) => console.log("Not logged in or error:", err.response?.data?.message));
-  }, [dispatch]); // ✅ Add `dispatch` to dependencies
+    dispatch(checkAuth()); // Check authentication on app load
+  }, [dispatch]);
 
   return (
     <Router>

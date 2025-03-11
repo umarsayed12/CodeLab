@@ -1,29 +1,48 @@
-
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState = {
-    isAuth : false,
-    userData: null
-}
+  isAuth: false,
+  userData: null,
+  isLoading: true, // New state to track authentication loading
+};
 
 const authSlice = createSlice({
-    name: "auth",
-    initialState,
-    reducers: {
-        login: (state, action) => {
-            state.isAuth = true;
-            state.userData = action.payload;
-            console.log("Recieved the data in Slice " , action.payload);
-        },
-        logout:(state)=>{
-            state.isAuth=false;
-            state.userData=null;
-            console.log("User logged out Succefully!! ");
-        }
-      
-     }
+  name: "auth",
+  initialState,
+  reducers: {
+    login: (state, action) => {
+      state.isAuth = true;
+      state.userData = action.payload;
+      state.isLoading = false;
+    },
+    logout: (state) => {
+      state.isAuth = false;
+      state.userData = null;
+      state.isLoading = false;
+    },
+    setLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
+  },
 });
 
-export const {login, logout} = authSlice.actions;
-
+export const { login, logout, setLoading } = authSlice.actions;
 export default authSlice.reducer;
+
+// Async action to check user authentication on page reload
+export const checkAuth = () => async (dispatch) => {
+  dispatch(setLoading(true)); // Start loading
+  try {
+    const response = await axios.get("http://localhost:5000/user/current-user", {
+      withCredentials: true,
+    });
+    if (response.data.success) {
+      dispatch(login(response.data.user));
+    } else {
+      dispatch(logout());
+    }
+  } catch (error) {
+    dispatch(logout());
+  }
+};

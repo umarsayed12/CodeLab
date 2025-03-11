@@ -3,16 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Video, VideoOff, Mic, MicOff, RefreshCw, X } from "lucide-react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import ProfilePanel from "../components/ProfilePanel";
+import {Header, Footer ,  LoadingScreen} from "../components";
 
 const SetupPage = () => {
   const navigate = useNavigate();
   const roomid = 123;
   const darkMode = useSelector((state) => state.theme?.darkMode) || false;
-  // const isAuthenticated = true;
-  const isAuthenticated = useSelector((state)=> state.auth.isAuth);
+  const isAuthenticated = useSelector((state) => state.auth.isAuth);
+  const isLoading = useSelector((state) => state.auth.isLoading); // Add loading state from Redux
   
   const videoRef = useRef(null);
   const [isCameraOn, setIsCameraOn] = useState(true);
@@ -23,9 +21,39 @@ const SetupPage = () => {
   const [selectedCamera, setSelectedCamera] = useState(null);
   const [selectedMicrophone, setSelectedMicrophone] = useState(null);
 
+  // Fetch available devices
+  const fetchDevices = async () => {
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const videoDevices = devices.filter(device => device.kind === 'videoinput');
+      const audioDevices = devices.filter(device => device.kind === 'audioinput');
+      setDevices({ video: videoDevices, audio: audioDevices });
+    } catch (error) {
+      console.error("Error fetching devices:", error);
+    }
+  };
+
+  // Start media stream
+  const startStream = async (cameraId = null, micId = null) => {
+    try {
+      const constraints = {
+        video: cameraId ? { deviceId: { exact: cameraId } } : true,
+        audio: micId ? { deviceId: { exact: micId } } : true
+      };
+      
+      const newStream = await navigator.mediaDevices.getUserMedia(constraints);
+      setStream(newStream);
+      if (videoRef.current) videoRef.current.srcObject = newStream;
+      setError("");
+    } catch (error) {
+      setError("⚠ Unable to access camera or microphone.");
+      console.error(error);
+    }
+  };
+
   // Redirect if not authenticated
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isLoading && !isAuthenticated) {
       // Show error message before redirecting
       const redirectTimeout = setTimeout(() => {
         navigate("/login", { 
@@ -38,9 +66,55 @@ const SetupPage = () => {
 
       return () => clearTimeout(redirectTimeout);
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, isLoading, navigate]);
 
-  // Prevent accessing setup if not authenticated
+  // Initial setup - IMPORTANT: Keep all useEffect hooks in the same order on all renders
+  useEffect(() => {
+    // Only initialize media if authenticated and not loading
+    if (isAuthenticated && !isLoading) {
+      fetchDevices();
+      startStream();
+    }
+    
+    // Cleanup function
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, [isAuthenticated, isLoading]);
+
+  // Toggle camera
+  const toggleCamera = async () => {
+    if (isCameraOn) {
+      stream?.getVideoTracks().forEach((track) => track.stop());
+      setStream(null);
+    } else {
+      await startStream(selectedCamera);
+    }
+    setIsCameraOn(!isCameraOn);
+  };
+
+  // Toggle microphone
+  const toggleMic = () => {
+    stream?.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));
+    setIsMicOn(!isMicOn);
+  };
+
+  // Retry stream
+  const retryStream = () => {
+    startStream(selectedCamera, selectedMicrophone);
+  };
+
+  // Enhanced Loading State - must come after all hooks are declared
+  if (isLoading) {
+    return <LoadingScreen 
+      title="Loading" 
+      message="Verifying your credentials..." 
+    />;
+  }
+
+  // Prevent accessing setup if not authenticated - must come after all hooks are declared
   if (!isAuthenticated) {
     return (
       <div className={`min-h-screen flex flex-col items-center justify-center transition-all ${
@@ -82,65 +156,6 @@ const SetupPage = () => {
       </div>
     );
   }
-
-  // Fetch available devices
-  const fetchDevices = async () => {
-    try {
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      const videoDevices = devices.filter(device => device.kind === 'videoinput');
-      const audioDevices = devices.filter(device => device.kind === 'audioinput');
-      setDevices({ video: videoDevices, audio: audioDevices });
-    } catch (error) {
-      console.error("Error fetching devices:", error);
-    }
-  };
-
-  // Start media stream
-  const startStream = async (cameraId = null, micId = null) => {
-    try {
-      const constraints = {
-        video: cameraId ? { deviceId: { exact: cameraId } } : true,
-        audio: micId ? { deviceId: { exact: micId } } : true
-      };
-      
-      const newStream = await navigator.mediaDevices.getUserMedia(constraints);
-      setStream(newStream);
-      if (videoRef.current) videoRef.current.srcObject = newStream;
-      setError("");
-    } catch (error) {
-      setError("⚠ Unable to access camera or microphone.");
-      console.error(error);
-    }
-  };
-
-  // Initial setup
-  useEffect(() => {
-    fetchDevices();
-    startStream();
-    return () => stream?.getTracks().forEach((track) => track.stop());
-  }, []);
-
-  // Toggle camera
-  const toggleCamera = async () => {
-    if (isCameraOn) {
-      stream?.getVideoTracks().forEach((track) => track.stop());
-      setStream(null);
-    } else {
-      await startStream(selectedCamera);
-    }
-    setIsCameraOn(!isCameraOn);
-  };
-
-  // Toggle microphone
-  const toggleMic = () => {
-    stream?.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));
-    setIsMicOn(!isMicOn);
-  };
-
-  // Retry stream
-  const retryStream = () => {
-    startStream(selectedCamera, selectedMicrophone);
-  };
 
   return (
     <div className={`min-h-screen flex flex-col transition-all ${

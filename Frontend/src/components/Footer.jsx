@@ -17,13 +17,13 @@ const Footer = () => {
               ? "text-gray-300 hover:text-white" 
               : "text-gray-700 hover:text-gray-900"}`}>
             © {new Date().getFullYear()} <span className={`font-semibold 
-              ${darkMode ? "text-cyan-400" : "text-cyan-600"}`}>CodeCollab</span>. All rights reserved.
+              ${darkMode ? "text-cyan-400" : "text-cyan-600"}`}>CodeIT</span>. All rights reserved.
           </p>
         </div>
         <div className="flex space-x-6">
           {/* GitHub */}
           <motion.a
-            href="https://github.com"
+            href="https://github.com/ashishxsoni"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.3, rotate: 10 }}
@@ -37,7 +37,7 @@ const Footer = () => {
           </motion.a>
           {/* Twitter */}
           <motion.a
-            href="https://twitter.com"
+            href="https://x.com/ashishxsoni"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.3, rotate: -10 }}
@@ -51,7 +51,7 @@ const Footer = () => {
           </motion.a>
           {/* LinkedIn */}
           <motion.a
-            href="https://linkedin.com"
+            href="https://www.linkedin.com/in/ashishxsoni/"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.3, rotate: 10 }}
