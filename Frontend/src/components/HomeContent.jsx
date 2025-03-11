@@ -1,13 +1,26 @@
 import { motion } from "framer-motion";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { LogIn, UserPlus, Video,MonitorUp } from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, NavLink } from "react-router-dom";
+import { LogIn, UserPlus, Video, MonitorUp } from "lucide-react";
 import { Typewriter } from "react-simple-typewriter";
-
+import { useEffect } from "react";
+import { checkAuth } from "../redux/authSlice"; // Adjust the path as needed
+import LoadingScreen from "./LoadingScreen"; // Adjust the path as needed
 
 const HomeContent = () => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuth);
+  const dispatch = useDispatch();
+  const { isAuth, isLoading } = useSelector((state) => state.auth);
   const darkMode = useSelector((state) => state.theme.darkMode);
+
+  // Check auth status when component mounts
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
+  // Show loading screen while authentication is being checked
+  if (isLoading) {
+    return <LoadingScreen title="Initializing" message="Checking authentication status..." />;
+  }
 
   return (
     <main
@@ -19,14 +32,16 @@ const HomeContent = () => {
         }`}
     >
       {/* Logo with Animation */}
-      <motion.img
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        src="/Logo/3.png"
-        alt="Large Logo"
-        className="h-28 drop-shadow-lg hover:scale-105 transition-all duration-300"
-      />
+      <NavLink to="/" className="flex items-center">
+        <motion.img
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          src="/Logo/3.png"
+          alt="Large Logo"
+          className="h-28 drop-shadow-lg hover:scale-105 transition-all duration-300"
+        />
+      </NavLink>
 
       {/* Typewriter Effect for Dynamic Text */}
       <h2
@@ -54,7 +69,7 @@ const HomeContent = () => {
       </h2>
 
       {/* Buttons */}
-      {isAuthenticated ? (
+      {isAuth ? (
         <div className="flex space-x-4">
           <Link to="/join">
             <motion.button

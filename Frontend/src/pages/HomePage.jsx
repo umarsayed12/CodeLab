@@ -1,12 +1,17 @@
-// src/pages/HomePage.jsx
-import {Header , Footer , HomeContent , ProfilePanel} from "../components"
 
-export default function HomePage() {
+import { Header, Footer } from "../components";
+import { Outlet } from "react-router-dom";
+
+export default function Layout() {
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen flex flex-col ">
       <Header />
-      <HomeContent />
+      <main className="flex-grow flex flex-col w-full h-full ">
+        <Outlet /> {/* This will render the correct page component based on the route */}
+      </main>
       <Footer />
-    </div>
+
+
+      </div>
   );
 }

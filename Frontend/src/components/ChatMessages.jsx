@@ -1,8 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Video, VideoOff, Mic, MicOff, Users, MessageCircle, Share, LogOut,
-  Copy, Bot, X, Check, Clipboard, Settings, UserPlus, ChevronLeft, ChevronRight
-} from "lucide-react";
+import {Share} from "lucide-react";
 const ChatMessages = ({ messages, newMessage, setNewMessage, handleSendMessage, darkMode }) => {
     return (
       <div className="flex flex-col h-full">

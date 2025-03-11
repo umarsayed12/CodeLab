@@ -4,8 +4,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import {CodeEditor, Footer, Header, ParticipantsList, ProfilePanel, LoadingScreen, AccessDeniedScreen , 
-  ChatMessages , ControlBar , ControlBarButton, EscNotification , Sidebar , ShareLinkPopup } from "../components";
+import {Footer, Header, LoadingScreen, AccessDeniedScreen, ControlBar , EscNotification , ShareLinkPopup , Sidebar , ChatMessages
+  ,CodeEditor  
+ } from "../components";
 
 const RoomPage = () => {
   const navigate = useNavigate();
@@ -147,7 +148,15 @@ const RoomPage = () => {
 
   // Access Denied UI if NOT Authenticated
   if (!isAuthenticated) {
-    return <AccessDeniedScreen darkMode={darkMode} navigate={navigate} />;
+    return (
+      <div className="min-h-screen flex flex-col ">
+      <Header/>
+      <main className="w-full h-full flex flex-col flex-grow">
+      <AccessDeniedScreen darkMode={darkMode} navigate={navigate} />
+      </main>
+      <Footer/>
+      </div>
+    )
   }
 
   return (

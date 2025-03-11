@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Header, Footer , LoadingScreen} from "../components";
+import { Header, Footer, LoadingScreen } from "../components";
 import { useSelector } from "react-redux";
 import { UserPlus, Eye, EyeOff } from "lucide-react";
 import { showErrorToast, showSuccessToast, showWarningToast } from "../util.js/toast";
@@ -17,6 +17,7 @@ const SignupPage = () => {
   const [profilePreview, setProfilePreview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const darkMode = useSelector((state) => state.theme.darkMode);
+  const [isHovered, setIsHovered] = useState(false);
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -87,18 +88,28 @@ const SignupPage = () => {
   }
 
   return (
-    <div className={`min-h-screen flex flex-col transition-all ${
+    <div className={`flex-grow flex flex-col transition-all ${
       darkMode 
         ? "bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white" 
         : "bg-gradient-to-br from-white via-blue-50 to-indigo-100 text-gray-800"
     }`}>
-      <Header />
       <main className="flex-grow flex flex-col items-center justify-center p-4 sm:p-6">
-        <div className={`w-full max-w-md p-5 rounded-lg shadow-xl relative ${
-          darkMode 
-            ? "border-2 border-sky-600 bg-slate-800" 
-            : "border border-sky-200 bg-white/90 backdrop-blur-sm"
-        }`}>
+        <motion.div
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          whileHover={{
+            scale: 1.01,
+            boxShadow: darkMode
+              ? "0 0 15px rgba(2, 132, 199, 0.4)"
+              : "0 0 15px rgba(6, 182, 212, 0.25)"
+          }}
+          transition={{ duration: 0.3 }}
+          className={`w-full max-w-md p-6 rounded-lg shadow-lg transition-all duration-200 relative ${
+            darkMode
+              ? "border-2 border-sky-600 bg-gradient-to-b from-slate-800 to-slate-900"
+              : "border-2 border-sky-400 bg-gradient-to-b from-white to-sky-50"
+          }`}
+        >
           {/* Profile Picture Preview - Positioned at the top overlapping with the container border */}
           <div className="absolute -top-5 left-1/2 transform -translate-x-1/2">
             <motion.div
@@ -131,8 +142,8 @@ const SignupPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className={`text-xl font-bold text-center mt-11 ${
-              darkMode ? "text-cyan-400" : "text-cyan-600"
+            className={`text-2xl font-bold text-center mt-11 ${
+              darkMode ? "text-cyan-400" : "text-sky-600"
             }`}
           >
             Create Account
@@ -145,12 +156,13 @@ const SignupPage = () => {
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
+                if (error) setError("");
               }}
-              className={`w-full px-3 py-2 rounded-md border ${
-                darkMode 
-                  ? "bg-slate-700 border-slate-600 text-white focus:border-sky-500 placeholder-gray-400" 
-                  : "bg-blue-50/80 border-gray-300 focus:border-sky-500 text-gray-800 placeholder-gray-500"
-              } focus:outline-none`}
+              className={`w-full px-4 py-3 text-lg font-medium border-b-2 focus:outline-none transition-all duration-300 ${
+                darkMode
+                  ? "bg-transparent border-slate-600 text-white focus:border-sky-500 placeholder-gray-400"
+                  : "bg-transparent border-gray-300 focus:border-sky-500 text-gray-800 placeholder-gray-500"
+              } ${isHovered ? (darkMode ? "border-sky-400" : "border-sky-400") : ""}`}
               required
             />
             <input
@@ -159,29 +171,31 @@ const SignupPage = () => {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
+                if (error) setError("");
               }}
-              className={`w-full px-3 py-2 rounded-md border ${
-                darkMode 
-                  ? "bg-slate-700 border-slate-600 text-white focus:border-sky-500 placeholder-gray-400" 
-                  : "bg-blue-50/80 border-gray-300 focus:border-sky-500 text-gray-800 placeholder-gray-500"
-              } focus:outline-none`}
+              className={`w-full px-4 py-3 text-lg font-medium border-b-2 focus:outline-none transition-all duration-300 ${
+                darkMode
+                  ? "bg-transparent border-slate-600 text-white focus:border-sky-500 placeholder-gray-400"
+                  : "bg-transparent border-gray-300 focus:border-sky-500 text-gray-800 placeholder-gray-500"
+              } ${isHovered ? (darkMode ? "border-sky-400" : "border-sky-400") : ""}`}
               required
             />
             
             {/* Password field with show/hide toggle */}
-            <div className="relative">
+            <div className="relative w-full">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
+                  if (error) setError("");
                 }}
-                className={`w-full px-3 py-2 rounded-md border ${
-                  darkMode 
-                    ? "bg-slate-700 border-slate-600 text-white focus:border-sky-500 placeholder-gray-400" 
-                    : "bg-blue-50/80 border-gray-300 focus:border-sky-500 text-gray-800 placeholder-gray-500"
-                } focus:outline-none`}
+                className={`w-full px-4 py-3 text-lg font-medium border-b-2 focus:outline-none transition-all duration-300 ${
+                  darkMode
+                    ? "bg-transparent border-slate-600 text-white focus:border-sky-500 placeholder-gray-400"
+                    : "bg-transparent border-gray-300 focus:border-sky-500 text-gray-800 placeholder-gray-500"
+                } ${isHovered ? (darkMode ? "border-sky-400" : "border-sky-400") : ""}`}
                 required
               />
               <button
@@ -200,7 +214,7 @@ const SignupPage = () => {
             </div>
             
             <div className="flex flex-col">
-              <label className={`text-xs mb-1 ${
+              <label className={`text-sm font-medium mb-1 ${
                 darkMode ? "text-gray-300" : "text-gray-600"
               }`}>
                 Profile Picture
@@ -209,27 +223,32 @@ const SignupPage = () => {
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                className={`w-full px-3 py-1.5 rounded-lg text-sm ${
-                  darkMode ? "bg-slate-700 text-gray-300" : "bg-blue-50/80 text-gray-700"
-                }`}
+                className={`w-full px-4 py-2 rounded-lg text-sm border transition-all duration-300 ${
+                  darkMode 
+                    ? "bg-transparent border border-slate-600 text-gray-300 focus:border-sky-500" 
+                    : "bg-transparent border border-gray-300 text-gray-700 focus:border-sky-500"
+                } ${isHovered ? (darkMode ? "border-sky-400" : "border-sky-400") : ""}`}
               />
             </div>
 
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.03, boxShadow: "0px 8px 15px rgba(14, 165, 233, 0.3)" }}
+              whileHover={{
+                scale: 1.03,
+                boxShadow: "0px 5px 10px rgba(14, 165, 233, 0.2)"
+              }}
               whileTap={{ scale: 0.95 }}
-              className={`flex items-center justify-center px-5 py-2 rounded-lg shadow-md transition-all ${
-                darkMode 
-                  ? "bg-gradient-to-r from-sky-600 to-cyan-600 hover:from-sky-500 hover:to-cyan-500 text-white" 
+              className={`flex items-center justify-center px-6 py-3 rounded-lg shadow-md transition-all duration-300 ${
+                darkMode
+                  ? "bg-gradient-to-r from-sky-600 to-cyan-600 hover:from-sky-500 hover:to-cyan-500 text-white"
                   : "bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white"
               }`}
             >
-              <UserPlus className="mr-2" size={16} />
+              <UserPlus className="mr-2" size={20} />
               Sign Up
             </motion.button>
 
-            <p className={`text-center text-sm ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+            <p className={`text-center ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
               Already have an account?{" "}
               <span
                 className={`cursor-pointer hover:underline ${
@@ -241,9 +260,8 @@ const SignupPage = () => {
               </span>
             </p>
           </form>
-        </div>
+        </motion.div>
       </main>
-      <Footer />
     </div>
   );
 };

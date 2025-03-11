@@ -51,7 +51,7 @@ const ProfilePanel = ({ panelOpen, onClose }) => {
   if (!isProfilePanelOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex justify-end  bg-opacity-50 backdrop-blur-sm">
       <motion.div
         initial={{ x: "100%" }}
         animate={{ x: 0 }}

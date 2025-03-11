@@ -34,7 +34,7 @@ const Header = () => {
         {/* Left Side - Logo */}
         <NavLink to="/" className="flex items-center">
           <motion.img
-            src="./Logo/3.png"
+            src="/Logo/3.png"
             alt="Logo"
             className="h-10 drop-shadow-lg"
             initial={{ opacity: 0, scale: 0.9 }}
@@ -116,7 +116,9 @@ const Header = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className={`md:hidden flex flex-col items-center space-y-4 p-4 shadow-md transition-all 
-              ${darkMode ? "bg-slate-900 text-white" : "bg-white text-gray-800"}`}
+              ${darkMode
+              ? "bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 border-gray-900 text-white"
+              : "bg-gradient-to-br from-white via-blue-50 to-indigo-100 border-gray-200 text-gray-800" }`}
           >
             <ThemeButton />
             <NavLink
