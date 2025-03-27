@@ -53,11 +53,16 @@ const HomeContent = () => {
       >
         <Typewriter
           words={[
-            "🚀 Collaborate in real-time",
+     /*        "🚀 Collaborate in real-time",
             "💻 Code together seamlessly",
             "🌍 Connect with developers worldwide",
             "⚡ Boost productivity with live coding",
-            "🎓 Learn and grow with your peers",
+            "🎓 Learn and grow with your peers", */
+            "Collaborate in real-time",
+            "Code together seamlessly",
+            "Connect with developers worldwide",
+            "Boost productivity with live coding",
+            "Learn and grow with your peers",
           ]}
           loop={0} // Infinite loop
           cursor

@@ -1,7 +1,7 @@
 // utils/toast.jsx
 import { toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { X } from "lucide-react";
 // Configure toast defaults
 const toastConfig = {
   position: "top-center",
@@ -16,9 +16,10 @@ const toastConfig = {
   closeButton: ({ closeToast }) => (
     <button 
       onClick={closeToast} 
-      className="text-gray-600 hover:text-gray-800 focus:outline-none"
+      className="text-gray-600 hover:text-gray-800 focus:outline-none absolute top-5 right-4 cursor-pointer ml-2"
+     
     >
-      ×
+      <X size={20} />
     </button>
   )
 };

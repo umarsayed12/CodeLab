@@ -1,13 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link , useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Video, VideoOff, Mic, MicOff, RefreshCw, AlertTriangle } from "lucide-react";
+import { Video, VideoOff, Mic, MicOff, RefreshCw, AlertTriangle, Frown } from "lucide-react";
 import { Header, Footer, LoadingScreen, AccessDeniedScreen } from "../components";
-
+import{
+  showErrorToast,
+  showWarningToast,
+  showSuccessToast
+} from "../utils/toast";
 const SetupPage = () => {
   const navigate = useNavigate();
-  const roomid = 123;
+  const location = useLocation();
+  const roomId = location.state?.roomId || "123"; 
   const darkMode = useSelector((state) => state.theme?.darkMode) || false;
   const isAuthenticated = useSelector((state) => state.auth.isAuth);
   const isLoading = useSelector((state) => state.auth.isLoading);
@@ -653,7 +658,7 @@ const SetupPage = () => {
 
           {/* Enter Room Button */}
           <div className="flex justify-center mt-6">
-            <Link to={`/room/${roomid}`}>
+            <Link to={`/room/${roomId}`}>
               <motion.button
                 whileHover={{ 
                   scale: 1.05, 

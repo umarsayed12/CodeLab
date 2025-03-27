@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect ,useRef } from "react";
 import { useNavigate, useLocation, NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Header, Footer, LoadingScreen } from "../components";
@@ -9,13 +9,15 @@ import {
   showSuccessToast,
   showErrorToast,
   showWarningToast,
-} from "../util.js/toast";
+} from "../utils/toast";
 import { login } from "../redux/authSlice";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  const isAuthenticated = useSelector((state) => state.auth.isAuth);
+
   
   // Add loading state
   const [isLoading, setIsLoading] = useState(false);
@@ -24,13 +26,25 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const darkMode = useSelector((state) => state.theme.darkMode);
   const [isHovered, setIsHovered] = useState(false);
+ // Use a ref to track if message has been shown
+ const messageShownRef = useRef(false);
+  //using setlocation we have the error msg from where we were trying to loggin and redirect to login page we use this to show the error msg
+  useEffect(() => {
+    // Check if there's a redirect message from another page
+    if (location.state?.message && !messageShownRef.current) {
+      messageShownRef.current = true;
+      showWarningToast(location.state.message);
+       // Clear the message so it doesn't show again on re-renders
+    // navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location]);
 
-  // useEffect(() => {
-  //   // Check if there's a redirect message from another page
-  //   if (location.state?.message) {
-  //     showWarningToast(location.state.message);
-  //   }
-  // }, [location]);
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -51,6 +65,7 @@ const LoginPage = () => {
           dispatch(login(response.data.user));
           
           // Check if there's a redirect destination
+          // using setlocation will auto redirect to the page from where the user was redirected to the login page after logged in
           if (location.state?.redirectFrom) {
             navigate(location.state.redirectFrom);
           } else {
@@ -60,6 +75,7 @@ const LoginPage = () => {
       })
       .catch((err) => {
         setIsLoading(false);
+        console.log("loggin catch")
         showErrorToast(err.response?.data?.message || "Something went wrong!");
       });
   };

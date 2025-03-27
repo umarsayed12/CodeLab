@@ -1,22 +1,30 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSelector } from "react-redux";
+import { useSelector , useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Copy, Check, X } from "lucide-react";
 import { Header, Footer, LoadingScreen, AccessDeniedScreen } from "../components";
+import axios from "axios";
+import {
+  showWarningToast , 
+  showSuccessToast ,
+  showErrorToast
+} from "../utils/toast";
+import { setLoading } from "../redux/authSlice";
+
 
 const HostPage = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuth);
+  const userData = useSelector((state) => state.auth.userData);
   const isLoading = useSelector((state) => state.auth.isLoading);
   const navigate = useNavigate();
   const [meetingName, setMeetingName] = useState("");
   const [hostName, setHostName] = useState("");
   const [roomId, setRoomId] = useState("");
   const [copied, setCopied] = useState(false);
-  const [error, setError] = useState("");
   const darkMode = useSelector((state) => state.theme.darkMode);
   const [isHovered, setIsHovered] = useState(false);
-
+const dispatch = useDispatch();
   useEffect(() => {
     if (!isAuthenticated && !isLoading) {
       setTimeout(() => {
@@ -27,10 +35,9 @@ const HostPage = () => {
 
   const generateRoomId = () => {
     if (!meetingName.trim() || !hostName.trim()) {
-      setError("⚠ Please fill in both the Meeting Name and Host Name.");
+      showErrorToast("⚠ All fields are required before generating a room ID.");
       return;
     }
-    setError("");
     const newRoomId = Math.random().toString(36).substring(2, 10);
     setRoomId(newRoomId);
     setCopied(false);
@@ -44,18 +51,36 @@ const HostPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!meetingName.trim() || !hostName.trim() || !roomId) {
-      setError("⚠ All fields are required before starting the meeting.");
-      return;
-    }
-    setError("");
-    navigate(`/room/setup`);
+   dispatch(setLoading(true));
+    const url = "http://localhost:5000/room/create-room";
+    const FormData = {
+      meetingName: meetingName,
+      hostName: hostName,
+      roomId: roomId,
+      host:userData,
+    };
+    axios.post(url, FormData , { withCredentials: true })
+    .then((response) => {
+      dispatch(setLoading(false));
+      if (response.data.status === "success") {
+        showSuccessToast(response.data.message);
+    navigate("/room/setup", { state: { roomId } });
+      } else if(response.data.status === "warning") {
+        showWarningToast(response.data.message);
+      }
+      else if(response.data.status === "error") {
+        showErrorToast(response.data.message);
+      }
+  }).catch((err) => {
+    dispatch(setLoading(false));
+    showErrorToast(err.response?.data?.message || "Something went wrong!");
+  }
+  );
   };
 
   // Handles input change and clears the error when user types
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
-    if (error) setError("");
   };
 
   // Loading state
@@ -110,7 +135,7 @@ const HostPage = () => {
           </motion.p>
 
           {/* Animated Error Message */}
-          <AnimatePresence>
+          {/* <AnimatePresence>
             {error && (
               <motion.p
                 initial={{ opacity: 0, y: -10 }}
@@ -121,7 +146,7 @@ const HostPage = () => {
                 {error}
               </motion.p>
             )}
-          </AnimatePresence>
+          </AnimatePresence> */}
 
           <form
             onSubmit={handleSubmit}

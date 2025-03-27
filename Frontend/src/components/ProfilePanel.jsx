@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, setLoading } from "../redux/authSlice";
 import { X, UserCircle, FileDown, Settings, LogOut } from "lucide-react";
-import { showSuccessToast, showErrorToast } from "../util.js/toast";
+import { showSuccessToast, showErrorToast } from "../utils/toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";

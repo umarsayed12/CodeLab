@@ -56,6 +56,7 @@ export const checkAuth = () => async (dispatch) => {
 
     if (response.data.success) {
       dispatch(login(response.data.user));
+     
     } else {
       dispatch(logout());
     }

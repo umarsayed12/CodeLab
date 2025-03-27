@@ -1,45 +1,60 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect ,useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink  , useLocation, redirect} from "react-router-dom";
 import { Header, Footer, LoadingScreen, AccessDeniedScreen } from "../components";
 import { X } from "lucide-react";
 import {
   showErrorToast,
   showSuccessToast,
   showWarningToast,
-} from "../util.js/toast";
+} from "../utils/toast";
 
 const JoinPage = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuth);
   const isLoading = useSelector((state) => state.auth.isLoading);
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState("");
-  const [error, setError] = useState("");
   const darkMode = useSelector((state) => state.theme.darkMode);
   const [isHovered, setIsHovered] = useState(false);
+  const location = useLocation();
+
+  //using setlocation we have the error msg from where we were trying to loggin and redirect to login page we use this to show the error msg
+  const messageShownRef = useRef(false);
+  //using setlocation we have the error msg from where we were trying to loggin and redirect to login page we use this to show the error msg
+  useEffect(() => {
+    // Check if there's a redirect message from another page
+    if (location.state?.message && !messageShownRef.current) {
+      messageShownRef.current = true;
+      showWarningToast(location.state.message);
+       // Clear the message so it doesn't show again on re-renders
+    // navigate(location?.pathname, { replace: true, state: {} });
+    }
+  }, [location]);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       setTimeout(() => {
-        navigate("/login");
+        navigate("/login" , { state: { message: "⚠ You need to login first!" ,
+          redirectFrom: "/join"
+         } });
       }, 3000);
     }
   }, [isAuthenticated, isLoading, navigate]);
 
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!roomId.trim()) {
-      setError("⚠ Room ID is required!");
+      showWarningToast("⚠ Room ID is required!");
       return;
     }
-    setError("");
     navigate(`/room/setup`);
   };
 
   const handleInputChange = (e) => {
     setRoomId(e.target.value);
-    if (error) setError("");
   };
 
   // Enhanced Loading State - Matching HostPage
@@ -51,7 +66,7 @@ const JoinPage = () => {
 
   // ❌ Access Denied UI if NOT Authenticated
   if (!isAuthenticated) {
-    return <AccessDeniedScreen darkMode={darkMode} navigate={navigate} />;
+    return <AccessDeniedScreen darkMode={darkMode} navigate={navigate}  redirectPath="/login" />;
   }
 
   return (
@@ -121,7 +136,7 @@ const JoinPage = () => {
             </div>
 
             {/* Error Message */}
-            <AnimatePresence>
+            {/* <AnimatePresence>
               {error && (
                 <motion.p
                   initial={{ opacity: 0, y: -10 }}
@@ -132,7 +147,7 @@ const JoinPage = () => {
                   {error}
                 </motion.p>
               )}
-            </AnimatePresence>
+            </AnimatePresence> */}
 
             {/* Join Button */}
             <motion.button

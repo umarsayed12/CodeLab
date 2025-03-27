@@ -4,11 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Header, Footer, LoadingScreen } from "../components";
 import { useSelector } from "react-redux";
 import { UserPlus, Eye, EyeOff } from "lucide-react";
-import { showErrorToast, showSuccessToast, showWarningToast } from "../util.js/toast";
+import { showErrorToast, showSuccessToast, showWarningToast } from "../utils/toast";
 import axios from "axios";
-
+import { setLoading } from "../redux/authSlice";
 const SignupPage = () => {
   const navigate = useNavigate();
+  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,22 +57,16 @@ const SignupPage = () => {
       });
 
       console.log("After Fetching in repsonse Query : Frontend");
-  
+      setIsLoading(false);
       if (response.data.status === "warning") {
         showWarningToast(response.data.message);
-        setIsLoading(false);
-        return;
       }
-  
-      if (response.data.status === "error") {
+      else if (response.data.status === "error") {
         showErrorToast(response.data.message);
-        setIsLoading(false);
-        return;
-      }
-  
+      }else{
       showSuccessToast(response.data.message);
-      setIsLoading(false);
       navigate("/login");
+      }
   
     } catch (err) {
       showErrorToast(err.response?.data?.message || "Something went wrong!");
@@ -156,7 +151,7 @@ const SignupPage = () => {
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
-                if (error) setError("");
+               
               }}
               className={`w-full px-4 py-3 text-lg font-medium border-b-2 focus:outline-none transition-all duration-300 ${
                 darkMode
@@ -171,7 +166,7 @@ const SignupPage = () => {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                if (error) setError("");
+               
               }}
               className={`w-full px-4 py-3 text-lg font-medium border-b-2 focus:outline-none transition-all duration-300 ${
                 darkMode
@@ -189,7 +184,7 @@ const SignupPage = () => {
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
-                  if (error) setError("");
+                 
                 }}
                 className={`w-full px-4 py-3 text-lg font-medium border-b-2 focus:outline-none transition-all duration-300 ${
                   darkMode

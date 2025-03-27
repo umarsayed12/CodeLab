@@ -52,7 +52,7 @@ const ChatMessages = ({ messages, newMessage, setNewMessage, handleSendMessage, 
               type="submit"
               className="bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white p-2 rounded-r-lg transition-colors"
             >
-              <Share size={20} />
+              <Share size={26} />
             </button>
           </div>
         </form>

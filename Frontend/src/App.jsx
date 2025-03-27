@@ -28,6 +28,9 @@
 // };
 
 // export default App;
+
+
+
 // src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./pages/HomePage"; // Now acts as the layout
@@ -47,16 +50,16 @@ import { checkAuth } from "./redux/authSlice";
 const App = () => {
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(checkAuth()); // Check authentication on app load
-  // }, [dispatch]);
-  
   useEffect(() => {
-    const verifyAuth = async () => {
-      await dispatch(checkAuth()); // Ensure the async action completes
-    };
-    verifyAuth();
+    dispatch(checkAuth()); // Check authentication on app load
   }, [dispatch]);
+  
+  // useEffect(() => {
+  //   const verifyAuth = async () => {
+  //     dispatch(checkAuth()); // Ensure the async action completes
+  //   };
+  //   verifyAuth();
+  // }, [dispatch]);
   
   return (
     <Router>
