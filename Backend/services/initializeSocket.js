@@ -4,7 +4,7 @@ const { globalRooms } = require("../controllers/roomManager");
 const initializeSocket = (server) => {
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:5173", // Explicitly list allowed origin
+      origin: process.env.CLIENT_URL || "http://localhost:5173", // Explicitly list allowed origin
       methods: ["GET", "POST"],
     },
     transports: ["websocket", "polling"], // Explicitly specify transports

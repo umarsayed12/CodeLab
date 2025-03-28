@@ -10,7 +10,7 @@ const { initializeSocket } = require("./services/initializeSocket.js");
 
 // More robust CORS configuration
 app.use(cors({
-  origin: ['http://localhost:5173'], // Match the origins in socket.io
+  origin: ['http://localhost:5173' , process.env.CLIENT_URL], // Match the origins in socket.io
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -32,10 +32,7 @@ connectMongoDB(process.env.MONGO_URL).then((result) => {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true,
-}));
+
 
 
 
