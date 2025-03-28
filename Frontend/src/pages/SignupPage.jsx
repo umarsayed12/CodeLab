@@ -50,7 +50,7 @@ const SignupPage = () => {
       if (profileImage) {
         formData.append("profileImage", profileImage);
       }
-      const url = "http://localhost:5000/user/signup";
+      const url = "https://codelab-sq6v.onrender.com/user/signup";
       
       const response = await axios.post(url, formData, {
         headers: { "Content-Type": "multipart/form-data" },

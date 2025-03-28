@@ -26,7 +26,7 @@ const ParticipantsList = ({ participants, darkMode }) => {
             <div className="relative mr-3">
               {participant.profileImage ? (
                 <img 
-                  src={`http://localhost:5000${participant.profileImage}`}
+                  src={`https://codelab-sq6v.onrender.com${participant.profileImage}`}
                   alt={participant.fullname}
                   className="h-10 w-10 rounded-full object-cover shadow-lg"
                 />
