@@ -16,5 +16,13 @@ export default defineConfig({
     }
     }, 
   },
+  build: {
+    outDir: 'dist',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
+  },
   plugins: [react(),tailwindcss()],
 })
