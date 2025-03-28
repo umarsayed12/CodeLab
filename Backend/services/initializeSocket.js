@@ -40,40 +40,40 @@ const initializeSocket = (server) => {
   // Debug helper to log room state
   const logRoomState = (roomId) => {
     const room = globalRooms.get(roomId);
-    console.log(
-      `Room ${roomId} state:`,
-      room
-        ? `Users: ${room.participants.size}, Names: ${JSON.stringify(
-            [...room.participants.values()].map((u) => u.fullname)
-          )}`
-        : "Room does not exist"
-    );
+    // console.log(
+    //   `Room ${roomId} state:`,
+    //   room
+    //     ? `Users: ${room.participants.size}, Names: ${JSON.stringify(
+    //         [...room.participants.values()].map((u) => u.fullname)
+    //       )}`
+    //     : "Room does not exist"
+    // );
   };
 
   // Add error handling for the entire Socket.IO server
   io.engine.on("connection_error", (err) => {
-    console.error("Socket.IO Connection Error:", {
-      code: err.code,
-      message: err.message,
-      context: err.context,
-    });
+    // console.error("Socket.IO Connection Error:", {
+    //   code: err.code,
+    //   message: err.message,
+    //   context: err.context,
+    // });
   });
 
   // Optional: Add a general error handler
   io.use((socket, next) => {
     socket.on("error", (error) => {
-      console.error("Socket Error:", error);
+      // console.error("Socket Error:", error);
     });
     next();
   });
 
   io.on("connection", (socket) => {
-    console.log(`User connected: ${socket.id}`);
-    console.log("Global Rooms:", globalRooms);
+    // console.log(`User connected: ${socket.id}`);
+    // console.log("Global Rooms:", globalRooms);
 
     // Add connection-specific error handling
     socket.on("connect_error", (err) => {
-      console.error(`Socket connection error for ${socket.id}:`, err.message);
+      // console.error(`Socket connection error for ${socket.id}:`, err.message);
     });
 
     // Track user state
@@ -82,18 +82,18 @@ const initializeSocket = (server) => {
     let currentUser = null;
 
     socket.on("join-room", ({ roomId, user }) => {
-      console.log(
-        `Join room request: ${user.fullname} (${user._id}) to room ${roomId}`
-      );
+      // console.log(
+      //   `Join room request: ${user.fullname} (${user._id}) to room ${roomId}`
+      // );
       if (currentRoom === roomId) {
-        console.log(`User ${user.fullname} is already in room ${roomId}`);
+        // console.log(`User ${user.fullname} is already in room ${roomId}`);
         return;
       }
       // Leave current room if in one
       if (currentRoom) {
-        console.log(
-          `User ${user.fullname} is leaving room ${currentRoom} before joining ${roomId}`
-        );
+        // console.log(
+        //   `User ${user.fullname} is leaving room ${currentRoom} before joining ${roomId}`
+        // );
 
         // Check if the room still exists
         if (globalRooms.has(currentRoom)) {
@@ -105,15 +105,15 @@ const initializeSocket = (server) => {
           if (userData) {
             //current user has any previous room
             if (userData._id === prevRoomHost) {
-              console.log(
-                `Host ${user.fullname} is leaving room ${currentRoom}, closing room`
-              );
+              // console.log(
+              //   `Host ${user.fullname} is leaving room ${currentRoom}, closing room`
+              // );
               io.to(currentRoom).emit("room-closed");
               globalRooms.delete(currentRoom);
             } else {
-              console.log(
-                `User ${user.fullname} is leaving room ${currentRoom}`
-              );
+              // console.log(
+              //   `User ${user.fullname} is leaving room ${currentRoom}`
+              // );
               globalRooms.get(currentRoom).participants.delete(currentUserId);
               io.to(currentRoom).emit("user-left", {
                 user: currentUser,
@@ -134,7 +134,7 @@ const initializeSocket = (server) => {
       // Create room if it doesn't exist
       if (!globalRooms.has(roomId)) {
         // done at host page
-        console.log(`there is no Room with this id: ${roomId}`);
+        // console.log(`there is no Room with this id: ${roomId}`);
         return;
       }
 
@@ -166,38 +166,38 @@ const initializeSocket = (server) => {
     });
 
     socket.on("code-change", ({ roomId, code }) => {
-      console.log(
-        `Code change in room ${roomId} by ${currentUser?.fullname || "Unknown"}`
-      );
+      // console.log(
+      //   `Code change in room ${roomId} by ${currentUser?.fullname || "Unknown"}`
+      // );
       globalRooms.get(roomId).code = code;
-      console.log("backedn the code comes from frontedn is \n", code);
+      // console.log("backedn the code comes from frontedn is \n", code);
       socket.to(roomId).emit("code-update", code);
     });
 
     socket.on("language-change", ({ roomId, language }) => {
-      console.log(
-        `Language changed to ${language} in room ${roomId} by ${
-          currentUser?.fullname || "Unknown"
-        }`
-      );
+      // console.log(
+      //   `Language changed to ${language} in room ${roomId} by ${
+      //     currentUser?.fullname || "Unknown"
+      //   }`
+      // );
       globalRooms.get(roomId).language = language;
       socket.to(roomId).emit("language-update", language);
     });
 
     socket.on("typing", ({ roomId }) => {
       if (currentUser) {
-        console.log(`${currentUser.fullname} is typing in room ${roomId}`);
+        // console.log(`${currentUser.fullname} is typing in room ${roomId}`);
         socket.to(roomId).emit("user-typing", currentUser.fullname);
       }
     });
 
     socket.on("update-messages", ({ roomId, messageData }) => {
       
-      console.log(
-        `New message in room ${roomId} from ${
-          currentUser?.fullname || "Unknown"
-        }: ${messageData}`
-      );
+      // console.log(
+      //   `New message in room ${roomId} from ${
+      //     currentUser?.fullname || "Unknown"
+      //   }: ${messageData}`
+      // );
 
       globalRooms.get(roomId).messages.push(messageData);
       io.to(roomId).emit("new-message", globalRooms.get(roomId).messages); // sending the array of messages
@@ -216,36 +216,36 @@ const initializeSocket = (server) => {
 
     socket.on("leave-room", () => {
       if (!currentRoom) {
-        console.log(
-          `Leave room event received but user ${socket.id} is not in a room`
-        );
+        // console.log(
+        //   `Leave room event received but user ${socket.id} is not in a room`
+        // );
         return;
       }
 
       if (!globalRooms.has(currentRoom)) {
-        console.log(
-          `Leave room event received but room ${currentRoom} doesn't exist`
-        );
+        // console.log(
+        //   `Leave room event received but room ${currentRoom} doesn't exist`
+        // );
         return;
       }
 
       const room = globalRooms.get(currentRoom);
       if (!room.participants.has(currentUserId)) {
-        console.log(
-          `Leave room event received but user ${currentUserId} not found in room ${currentRoom}`
-        );
+        // console.log(
+        //   `Leave room event received but user ${currentUserId} not found in room ${currentRoom}`
+        // );
         return;
       }
 
       const userData = room.participants.get(currentUserId);
-      console.log(
-        `User ${userData.fullname} is leaving room ${currentRoom} voluntarily`
-      );
+      // console.log(
+      //   `User ${userData.fullname} is leaving room ${currentRoom} voluntarily`
+      // );
 
       if (currentUser.isHost) {
-        console.log(
-          `Host ${userData.fullname} is leaving room ${currentRoom}, closing room`
-        );
+        // console.log(
+        //   `Host ${userData.fullname} is leaving room ${currentRoom}, closing room`
+        // );
         io.to(currentRoom).emit("room-closed");
         globalRooms.delete(currentRoom);
       } else {
@@ -257,7 +257,7 @@ const initializeSocket = (server) => {
 
         // Clean up empty rooms
         if (room.participants.size === 0) {
-          console.log(`Room ${currentRoom} is now empty, removing it`);
+          // console.log(`Room ${currentRoom} is now empty, removing it`);
           globalRooms.delete(currentRoom);
         }
       }
@@ -269,25 +269,25 @@ const initializeSocket = (server) => {
     });
 
     socket.on("disconnect", () => {
-      console.log(
-        `User disconnected: ${socket.id}, user: ${
-          currentUser?.fullname || "Unknown"
-        }`
-      );
+      // console.log(
+      //   `User disconnected: ${socket.id}, user: ${
+      //     currentUser?.fullname || "Unknown"
+      //   }`
+      // );
 
       if (currentRoom && currentUserId && globalRooms.has(currentRoom)) {
         const room = globalRooms.get(currentRoom);
         const userData = room.participants.get(currentUserId);
 
         if (userData) {
-          console.log(
-            `${userData.fullname} disconnected from room ${currentRoom}`
-          );
+          // console.log(
+          //   `${userData.fullname} disconnected from room ${currentRoom}`
+          // );
 
           if (currentUser.isHost) {
-            console.log(
-              `Host ${userData.fullname} disconnected from room ${currentRoom}, closing room`
-            );
+            // console.log(
+            //   `Host ${userData.fullname} disconnected from room ${currentRoom}, closing room`
+            // );
             io.to(currentRoom).emit("room-closed", {
               hostName: userData.fullname,
             });
@@ -301,7 +301,7 @@ const initializeSocket = (server) => {
 
             // Clean up empty rooms
             if (room.size === 0) {
-              console.log(`Room ${currentRoom} is now empty, removing it`);
+              // console.log(`Room ${currentRoom} is now empty, removing it`);
               globalRooms.delete(currentRoom);
             }
           }
@@ -312,13 +312,13 @@ const initializeSocket = (server) => {
 
   // Optional: Global error handling
   io.on("error", (error) => {
-    console.error("Unhandled Socket.IO Error:", error);
+    // console.error("Unhandled Socket.IO Error:", error);
   });
   // Log current state of all rooms every 5 minutes
   setInterval(() => {
-    console.log(`Active rooms: ${globalRooms.size}`);
+    // console.log(`Active rooms: ${globalRooms.size}`);
     globalRooms.forEach((room, roomId) => {
-      console.log(`Room ${roomId}: ${room.participants.size} users`);
+      // console.log(`Room ${roomId}: ${room.participants.size} users`);
     });
   }, 5 * 60 * 1000);
 

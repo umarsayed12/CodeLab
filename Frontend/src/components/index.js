@@ -10,7 +10,7 @@ import AccessDeniedScreen from "./AccessDenied";
 import ChatMessages from "./ChatMessages";
 import ControlBar from "./ControlBar";
 import ControlBarButton from "./ControlBarButton";
-import EscNotification from "./ESCNotification";
+import EscNotification from "./EscNotification";
 import Sidebar from "./sideBar";
 import ShareLinkPopup from "./ShareLinkPopup";
 import LeaveRoomModal from "./LeaveRoomScreen";

@@ -8,7 +8,6 @@ const validateEmail = (email) => {
 async function handleSignUp(req, res) {
   try {
     const { fullname, email, password } = req.body;
-    console.log("📩 Signup request received:", req.body, "\n");
 
     // ✅ Validate Required Fields
     if (!fullname?.trim() || !email?.trim() || !password?.trim()) {
@@ -37,7 +36,6 @@ async function handleSignUp(req, res) {
     // ✅ Check If User Already Exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      console.log("🚨 User already exists!");
       return res.status(409).json({
         status: "error",
         message: "User with this email already exists.",
@@ -55,7 +53,6 @@ async function handleSignUp(req, res) {
        : `/uploads/userProfiles/man.png`; // Default profile image 
 
      
-      console.log("after Upoading middleware the path is :", profileImagePath,"\n","the req.file in signup is : ",req.file);
     // ✅ Create a New User , and stored the image path in database
     const newUser = await User.create({
       fullname,
@@ -64,7 +61,6 @@ async function handleSignUp(req, res) {
       profileImage:profileImagePath,
     });
 
-    console.log("✅ Signup Successful:", newUser);
 
     // ✅ Send Response with User Data (excluding password)
     return res.status(201).json({
@@ -72,7 +68,6 @@ async function handleSignUp(req, res) {
       message: "🎉 User registered successfully!",
     });
   } catch (error) {
-    console.error("❌ Signup Error:", error);
     return res.status(500).json({
       status: "error",
       message: "Server error during registration. Please try again later.",

@@ -111,14 +111,14 @@ const CodeEditor = ({
 
   const handleLanguageChange = (e) => {
     const newLanguage = e.target.value;
-    console.log("language change in frontend , new language is ", newLanguage);
+    // console.log("language change in frontend , new language is ", newLanguage);
 
     setLanguage(newLanguage);
     socket?.emit("language-change", { roomId, language: newLanguage });
   }
 
   const handleCodeChange = (newCode) => {
-    console.log("Code Change", newCode);  
+    // console.log("Code Change", newCode);  
     setCode(newCode);
     socket.emit("code-change", { roomId, code: newCode });
     socket.emit("typing", { roomId });

@@ -20,23 +20,3 @@ const themeSlice = createSlice({
 export const { toggleTheme } = themeSlice.actions;
 export default themeSlice.reducer;
 
-
-
- /* WITH REDUX PERSIST remove any storage  */
-
-/* 
-import { createSlice } from "@reduxjs/toolkit";
-
-const themeSlice = createSlice({
-  name: "theme",
-  initialState: { darkMode: false }, // Redux Persist will handle loading the stored value
-  reducers: {
-    toggleTheme: (state) => {
-      state.darkMode = !state.darkMode; // No need to manually store in localStorage
-    },
-  },
-});
-
-export const { toggleTheme } = themeSlice.actions;
-export default themeSlice.reducer;
- */

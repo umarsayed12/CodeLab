@@ -113,7 +113,7 @@ const RoomPage = () => {
         .then((response) => {
           dispatch(setLoading(false));
           if (response.data.status === "error") {
-            console.log("Frontend error ");
+            // console.log("Frontend error ");
             navigate("/join", {
               state: {
                 message: response.data.message,
@@ -121,7 +121,7 @@ const RoomPage = () => {
             });
 
           } else if (response.data.status === "warning") {
-            console.log("Frontend warning ");
+            // console.log("Frontend warning ");
             navigate("/join", {
               state: {
                 message: response.data.message,
@@ -132,8 +132,8 @@ const RoomPage = () => {
 
               setHost(response.data.host); // set actual host in this state
               setIsHost(response.data.host._id === userData._id); // set the current user state that he is host or not 
-              console.log(`for meeting ${roomId} Host is ${response.data.host.fullname}`);
-              console.log(`${userData.fullname} is ${response.data.host._id === userData._id? "Host" : "Not Host"}`);
+              // console.log(`for meeting ${roomId} Host is ${response.data.host.fullname}`);
+              // console.log(`${userData.fullname} is ${response.data.host._id === userData._id? "Host" : "Not Host"}`);
 
             // const socketOptions = {
             //   path: "/socket.io",
@@ -159,7 +159,7 @@ const RoomPage = () => {
 
             // Handle connection errors
             socketRef.current.on("connect_error", (err) => {
-              console.error("Socket connection error:", err.message);
+              // console.error("Socket connection error:", err.message);
               showErrorToast("Failed to connect to the server. Please try again.");
               navigate("/join" , {
                 state: {
@@ -201,18 +201,18 @@ const RoomPage = () => {
 
             // Socket event listeners
             socketRef.current.on("code-update", (newCode) => {
-              console.log("New Code Update Received", newCode);
+              // console.log("New Code Update Received", newCode);
               
               setCode(newCode);
             });
             
             socketRef.current.on("language-update", (newLanguage) => {
-              console.log("New Language  Update Received", newLanguage);
+              // console.log("New Language  Update Received", newLanguage);
               setLanguage(newLanguage);
             });
             //messagedata is an array of objects
             socketRef.current.on("new-message", (messageData) => {
-              console.log("New message received", messageData);
+              // console.log("New message received", messageData);
               setMessages(messageData);
               showNotification(
                 `${messageData.sender.fullname} sent a message in chats`,
@@ -286,7 +286,7 @@ const RoomPage = () => {
            setRoomLink(`${window.location.origin}/room/${roomId}`);
         })
         .catch((err) => {
-          console.log("Frontend catch error ");
+          // console.log("Frontend catch error ");
           err.response?.data?.message || "Something went wrong!"
           dispatch(setLoading(false));
           navigate("/join", {

@@ -1,8 +1,7 @@
 // New Component: ControlBar
-import { motion, AnimatePresence } from "framer-motion";
 import {
-  Video, VideoOff, Mic, MicOff, Users, MessageCircle, Share, LogOut,
-  Copy, Bot, X, Check, Clipboard, Settings, UserPlus, ChevronLeft, ChevronRight
+  Video, VideoOff, Mic, MicOff, Users, MessageCircle,  LogOut,
+   Bot,  Clipboard,  ChevronLeft, ChevronRight
 } from "lucide-react";
 import ControlBarButton from "./ControlBarButton";
 const ControlBar = ({ 

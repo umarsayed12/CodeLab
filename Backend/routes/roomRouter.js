@@ -16,7 +16,7 @@ function createRoomHandler(req, res) {
           });
         }
         if (createRoom(roomId, host)) {
-            console.log("Backend room Created",{meetingName,hostName,roomId,host});
+            // console.log("Backend room Created",{meetingName,hostName,roomId,host});
         return res.status(201).json({ status: 'success', message: 'Room created successfully.' });
     }
     return res.status(400).json({ status: 'error', message: 'Room already exists.' });

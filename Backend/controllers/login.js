@@ -7,7 +7,6 @@ const validateEmail = (email) => {
 async function handleLogin(req, res) {
   try {
     const { email, password } = req.body;
-    console.log("🚀 Entry Point of Login Auth:", req.body);
 
       // ✅ Validate Required Fields
       if (!email?.trim() || !password?.trim()) {
@@ -55,7 +54,6 @@ async function handleLogin(req, res) {
     //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
     // });
     res.cookie("token", token);
-    console.log("✅ Login Successful for:", user.email);
 
     return res.status(200).json({
       success: true,
@@ -70,7 +68,6 @@ async function handleLogin(req, res) {
     });
 
   } catch (err) {
-    console.error("⚠ Error during login:", err.message);
 
     return res.status(500).json({
       success: false,

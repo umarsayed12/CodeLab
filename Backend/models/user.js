@@ -51,7 +51,7 @@ userSchema.pre("save", function (next) {
     // console.log("after User : " ,user);
     return next();
   } catch (err) {
-    console.log("Error in Scheme Pre:" , err);
+    // console.log("Error in Scheme Pre:" , err);
     next(err);
   }
 });

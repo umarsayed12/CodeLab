@@ -75,7 +75,7 @@ const LoginPage = () => {
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log("loggin catch")
+        // console.log("loggin catch")
         showErrorToast(err.response?.data?.message || "Something went wrong!");
       });
   };

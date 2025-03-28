@@ -4,7 +4,6 @@ const globalRooms = new Map(); // Stores active rooms
 const createRoom = (roomId, hostUser) => {
 
   if (!hostUser || !hostUser._id || !hostUser.fullname) {
-    console.error("Invalid hostUser:", hostUser);
     return false;
   }
   if (!globalRooms.has(roomId)) {
@@ -32,14 +31,12 @@ const doesRoomExist = (roomId) => {
 
 const handleRoomAccess = (req , res) => {
   try {
-    console.log("Backend Code Room Access Start handling");
     const { roomId } = req.params;
     const { user } = req.query;
 
     // Check if room exists
     const room = globalRooms.get(roomId);
     if (!room) {
-        console.log("Backend Code Room does not exist" , roomId);
       return res.status(404).json({ 
         status: 'error', 
         message: 'Room does not exist.' 
@@ -50,14 +47,12 @@ const handleRoomAccess = (req , res) => {
 
     // Check if user is blocked
     if (room.blockedUsers.has(user._id)) {
-        console.log("Backend Code User is Blocked");
       return res.status(403).json({ 
         status: 'error', 
         message: 'You have been blocked from this room.' 
       });
     }
 
-    console.log("Backend Code User in Room");
     // Successful room access
    
     return res.status(200).json({ 
@@ -67,7 +62,6 @@ const handleRoomAccess = (req , res) => {
     });
 
   } catch (error) {
-    console.error('Room Access Error:', error);
    return res.status(500).json({ 
       status: 'error', 
       message: 'Internal server error accessing room.' 

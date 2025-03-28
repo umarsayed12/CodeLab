@@ -21,10 +21,10 @@ const io = initializeSocket(server);
 
 //connect MongoDB
 connectMongoDB(process.env.MONGO_URL).then((result) => {
-    console.log("DataBase Connected SuccessFully!");
+    // console.log("DataBase Connected SuccessFully!");
 })
 .catch((err) => {
-    console.log("Database Can't Connect Error:", err);
+    // console.log("Database Can't Connect Error:", err);
 });
 
 
@@ -73,5 +73,5 @@ app.use("/room", roomRouter);
 const port = process.env.PORT || 5000;
 
 server.listen(port, () => { 
-  console.log(`Server is running on http://localhost:${port}`);
+  // console.log(`Server is running on http://localhost:${port}`);
 });
