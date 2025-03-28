@@ -4,6 +4,11 @@
     Content-Type = "text/javascript"
 
 [[headers]]
-  for = "/*.mjs"
+  for = "/assets/*.js"
   [headers.values]
     Content-Type = "text/javascript"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
