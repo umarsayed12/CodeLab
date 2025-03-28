@@ -38,7 +38,7 @@ const SetupPage = () => {
         const tempStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
         tempStream.getTracks().forEach(track => track.stop());
       } catch (permError) {
-        console.warn("Permission check encountered an issue:", permError);
+        // console.warn("Permission check encountered an issue:", permError);
         // Continue anyway as we might still be able to enumerate devices
         // even with partial permissions
       }
@@ -58,7 +58,7 @@ const SetupPage = () => {
         setError("⚠ No devices detected or permission denied. Please check your system settings.");
       }
     } catch (error) {
-      console.error("Error fetching devices:", error);
+      // console.error("Error fetching devices:", error);
       setError("⚠ Unable to access device information. Please check permissions.");
     }
   };
@@ -139,7 +139,7 @@ const SetupPage = () => {
       setIsCameraOn(newStream.getVideoTracks().length > 0 && forceCameraOn);
       setIsMicOn(newStream.getAudioTracks().length > 0 && forceMicOn);
     } catch (error) {
-      console.error("Error starting stream:", error);
+      // console.error("Error starting stream:", error);
       
       // Provide detailed error messages for better user experience
       if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
@@ -225,7 +225,7 @@ const SetupPage = () => {
               videoRef.current.srcObject = null;
             }
           } catch (audioError) {
-            console.error("Error creating audio-only stream:", audioError);
+            // console.error("Error creating audio-only stream:", audioError);
             setError("⚠ Could not maintain audio stream when turning off camera.");
           }
         } else {
@@ -272,7 +272,8 @@ const SetupPage = () => {
         setError(""); // Clear any previous errors
       }
     } catch (error) {
-      console.error("Error toggling camera:", error);
+      // console.error("Error toggling camera:", error);
+
       
       // Provide user-friendly error message
       if (error.name === "NotAllowedError") {
@@ -344,7 +345,7 @@ const SetupPage = () => {
         }
       }
     } catch (error) {
-      console.error("Error toggling microphone:", error);
+      // console.error("Error toggling microphone:", error);
       
       // Provide user-friendly error message
       if (error.name === "NotAllowedError") {
@@ -387,7 +388,7 @@ const SetupPage = () => {
       } catch (permError) {
         // This indicates permission was denied or devices are unavailable
         // Continue to device enumeration anyway as audio might be available if video isn't
-        console.warn("Permission check encountered an issue:", permError);
+        // console.warn("Permission check encountered an issue:", permError);
       }
       
       // Now re-fetch the devices after permissions may have changed
@@ -401,7 +402,7 @@ const SetupPage = () => {
         isMicOn
       );
     } catch (err) {
-      console.error("Refresh devices error:", err);
+      // console.error("Refresh devices error:", err);
       
       // More specific error messages based on error type
       if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {

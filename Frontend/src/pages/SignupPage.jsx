@@ -56,7 +56,7 @@ const SignupPage = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      console.log("After Fetching in repsonse Query : Frontend");
+      // console.log("After Fetching in repsonse Query : Frontend");
       setIsLoading(false);
       if (response.data.status === "warning") {
         showWarningToast(response.data.message);
