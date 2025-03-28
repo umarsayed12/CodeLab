@@ -44,7 +44,7 @@ const LoginPage = () => {
       navigate("/");
     }
   }, [isAuthenticated, navigate]);
-  
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -120,7 +120,7 @@ const LoginPage = () => {
               transition={{ duration: 0.5 }}
               src="/Logo/3.png"
               alt="Logo"
-              className="h-16 drop-shadow-lg hover:scale-105 transition-all duration-300"
+              className="h-32 drop-shadow-lg hover:scale-105 transition-all duration-300"
             />
           </NavLink>
           

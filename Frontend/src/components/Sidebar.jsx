@@ -3,9 +3,9 @@ import {X} from "lucide-react";
 import ParticipantsList from "./ParticipantsList";
 import ChatMessages from "./ChatMessages";
 const Sidebar = ({ 
-    show, content, onClose, 
-    participants, messages, newMessage, 
-    setNewMessage, handleSendMessage, darkMode 
+    show, content, onClose, host,setHost,
+    socket, roomId,participants, messages, setMessages ,
+    darkMode 
   }) => {
     if (!show) return null;
     
@@ -47,13 +47,13 @@ const Sidebar = ({
         {/* Sidebar Content */}
         <div className="flex-grow overflow-auto">
           {content === "participants" ? (
-            <ParticipantsList participants={participants} darkMode={darkMode} />
+            <ParticipantsList participants={participants} darkMode={darkMode} roomId={roomId} />
           ) : (
             <ChatMessages 
+            socket={socket}
+            roomId={roomId}
               messages={messages} 
-              newMessage={newMessage} 
-              setNewMessage={setNewMessage} 
-              handleSendMessage={handleSendMessage} 
+              setMessages={setMessages}
               darkMode={darkMode} 
             />
           )}

@@ -39,7 +39,7 @@ const HomeContent = () => {
           transition={{ duration: 0.5 }}
           src="/Logo/3.png"
           alt="Large Logo"
-          className="h-28 drop-shadow-lg hover:scale-105 transition-all duration-300"
+          className="h-52 drop-shadow-lg hover:scale-105 transition-all duration-300"
         />
       </NavLink>
 

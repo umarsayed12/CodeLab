@@ -3,11 +3,13 @@ import Editor from "@monaco-editor/react";
 import { Copy, FileCode, Minimize2, Maximize2, ZoomIn, ZoomOut, Save } from "lucide-react";
 import { useSelector } from "react-redux";
 
-const CodeEditor = () => {
-  const [code, setCode] = useState("// Write your code here...");
-  const [language, setLanguage] = useState("javascript");
+const CodeEditor = ({
+  socket, code, language , setCode , setLanguage ,roomId  ,  parentIsFullScreen,
+  isTyping , typingContent,
+}) => {
+ 
   const [fontSize, setFontSize] = useState(14);
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(parentIsFullScreen || false);
   const [isCopied, setIsCopied] = useState(false);
   const [showFullscreenNotice, setShowFullscreenNotice] = useState(false);
   const editorRef = useRef(null);
@@ -82,6 +84,7 @@ const CodeEditor = () => {
     };
 
     window.addEventListener('resize', handleResize);
+
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -105,6 +108,21 @@ const CodeEditor = () => {
       });
     }
   };
+
+  const handleLanguageChange = (e) => {
+    const newLanguage = e.target.value;
+    console.log("language change in frontend , new language is ", newLanguage);
+
+    setLanguage(newLanguage);
+    socket?.emit("language-change", { roomId, language: newLanguage });
+  }
+
+  const handleCodeChange = (newCode) => {
+    console.log("Code Change", newCode);  
+    setCode(newCode);
+    socket.emit("code-change", { roomId, code: newCode });
+    socket.emit("typing", { roomId });
+  }
 
   // Toggle fullscreen with improved implementation
   const toggleFullScreen = () => {
@@ -171,8 +189,31 @@ const CodeEditor = () => {
         alignItems: 'center',
         padding: '12px',
         backgroundImage: toolbarBgGradient,
-        borderBottom: `1px solid ${borderColor}`
+        borderBottom: `1px solid ${borderColor}`,
+        position: 'relative' // Added to position typing indicator
       }}>
+        {/* Typing Indicator - New Addition */}
+        {isTyping && (
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: darkMode 
+              ? 'rgba(34, 211, 238, 0.8)' // Translucent cyan for dark mode
+              : 'rgba(9, 141, 178, 0.7)', // Translucent cyan for light mode
+            color: darkMode ? '#ffffff' : '#ffffff',
+            padding: '4px 12px',
+            borderRadius: '16px',
+            fontSize: '12px',
+            fontWeight: 500,
+            animation: 'pulse 1.5s infinite',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+          }}>
+            {typingContent}
+          </div>
+        )}
+
         {/* Left side controls */}
         <div style={{
           display: 'flex',
@@ -187,13 +228,13 @@ const CodeEditor = () => {
             marginRight: '8px'
           }}>
             <FileCode size={20} style={{ marginRight: '8px' }} />
-            <span style={{ fontWeight: 600 }}>Code Editor</span>
+            <span style={{ fontWeight: 600 }}>CodeLab</span>
           </div>
           
           {/* Language Selector - Enhanced */}
           <select
             value={language}
-            onChange={(e) => setLanguage(e.target.value)}
+            onChange={handleLanguageChange}
             style={{
               backgroundColor: controlBgColor,
               color: textColor,
@@ -336,6 +377,15 @@ const CodeEditor = () => {
         </div>
       </div>
 
+      {/* Global style for pulse animation */}
+      <style>{`
+        @keyframes pulse {
+          0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; }
+          50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+          100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; }
+        }
+      `}</style>
+
       {/* Monaco Editor - Improved container */}
       <div style={{
         flexGrow: 1,
@@ -369,9 +419,10 @@ const CodeEditor = () => {
           height="100%"
           width="100%"
           theme={darkMode ? "vs-dark" : "vs"}
+          defaultLanguage={'javascript'}
           language={language}
-          value={code}
-          onChange={(value) => setCode(value)}
+          value={code || "// Write your code here..."}
+          onChange={handleCodeChange}
           options={{
             fontSize: fontSize,
             fontFamily: "'Fira Code', 'Consolas', monospace",

@@ -17,7 +17,7 @@ const Footer = () => {
               ? "text-gray-300 hover:text-white" 
               : "text-gray-700 hover:text-gray-900"}`}>
             © {new Date().getFullYear()} <span className={`font-semibold 
-              ${darkMode ? "text-cyan-400" : "text-cyan-600"}`}>CodeIT</span>. All rights reserved.
+              ${darkMode ? "text-cyan-400" : "text-cyan-600"}`}>CodeLab</span>. All rights reserved.
           </p>
         </div>
         <div className="flex space-x-6">

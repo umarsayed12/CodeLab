@@ -2,6 +2,11 @@
 const globalRooms = new Map(); // Stores active rooms
 
 const createRoom = (roomId, hostUser) => {
+
+  if (!hostUser || !hostUser._id || !hostUser.fullname) {
+    console.error("Invalid hostUser:", hostUser);
+    return false;
+  }
   if (!globalRooms.has(roomId)) {
     globalRooms.set(roomId, {
       host: hostUser,
@@ -34,7 +39,7 @@ const handleRoomAccess = (req , res) => {
     // Check if room exists
     const room = globalRooms.get(roomId);
     if (!room) {
-        console.log("Backend Code Room does not exist");
+        console.log("Backend Code Room does not exist" , roomId);
       return res.status(404).json({ 
         status: 'error', 
         message: 'Room does not exist.' 

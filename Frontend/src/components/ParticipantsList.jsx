@@ -1,7 +1,6 @@
+import React from 'react';
+import { Settings, UserPlus, Mic, MicOff, Video, VideoOff } from "lucide-react";
 
-
-// New Component: ParticipantsList
-import {Settings, UserPlus} from "lucide-react";
 const ParticipantsList = ({ participants, darkMode }) => {
   return (
     <div className="p-4">
@@ -19,29 +18,62 @@ const ParticipantsList = ({ participants, darkMode }) => {
       <div className="space-y-3">
         {participants.map(participant => (
           <div 
-            key={participant.id}
+            key={participant.email}
             className={`flex items-center p-2 rounded-lg transition-colors ${
               darkMode ? "hover:bg-slate-800" : "hover:bg-blue-50"
             }`}
           >
             <div className="relative mr-3">
-              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-cyan-600 to-teal-600 flex items-center justify-center text-white font-bold shadow-lg">
-                {participant.name.charAt(0)}
-              </div>
-              {participant.isActive && (
-                <div className={`absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 ${
-                  darkMode ? "border-slate-900" : "border-white"
-                }`}></div>
+              {participant.profileImage ? (
+                <img 
+                  src={`http://localhost:5000${participant.profileImage}`}
+                  alt={participant.fullname}
+                  className="h-10 w-10 rounded-full object-cover shadow-lg"
+                />
+              ) : (
+                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-cyan-600 to-teal-600 flex items-center justify-center text-white font-bold shadow-lg">
+                  {participant.fullname.charAt(0)}
+                </div>
               )}
             </div>
             <div className="flex-grow">
-              <p className="font-medium">{participant.name}</p>
-              <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
-                {participant.isHost ? "Host" : "Participant"}
-              </p>
+              <div className="flex items-center">
+                <p className="font-medium mr-2">{participant.fullname}</p>
+                {participant.isHost && (
+                  <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                    darkMode 
+                      ? "bg-yellow-600 text-yellow-100" 
+                      : "bg-yellow-100 text-yellow-700"
+                  }`}>
+                    Host
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center space-x-2">
+                {/* Mic Status */}
+                <div className={`text-xs flex items-center ${
+                  participant.isMicOn 
+                    ? (darkMode ? "text-green-400" : "text-green-600")
+                    : (darkMode ? "text-red-400" : "text-red-600")
+                }`}>
+                  {participant.isMicOn ? <Mic size={14} /> : <MicOff size={14} />}
+                  <span className="ml-1">{participant.isMicOn ? "Mic On" : "Mic Off"}</span>
+                </div>
+                
+                {/* Camera Status */}
+                <div className={`text-xs flex items-center ${
+                  participant.isCameraOn 
+                    ? (darkMode ? "text-green-400" : "text-green-600")
+                    : (darkMode ? "text-red-400" : "text-red-600")
+                }`}>
+                  {participant.isCameraOn ? <Video size={14} /> : <VideoOff size={14} />}
+                  <span className="ml-1">{participant.isCameraOn ? "Camera On" : "Camera Off"}</span>
+                </div>
+              </div>
             </div>
+            
             {participant.isHost && (
-              <div className="text-yellow-500">
+              <div className={`text-yellow-500 ${darkMode ? "opacity-70" : ""}`}>
                 <Settings size={16} />
               </div>
             )}
@@ -52,4 +84,4 @@ const ParticipantsList = ({ participants, darkMode }) => {
   );
 };
 
-export default ParticipantsList
+export default ParticipantsList;

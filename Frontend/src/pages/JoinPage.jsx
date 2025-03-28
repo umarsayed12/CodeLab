@@ -50,7 +50,7 @@ const JoinPage = () => {
       showWarningToast("⚠ Room ID is required!");
       return;
     }
-    navigate(`/room/setup`);
+    navigate("/room/setup", { state: { roomId } });
   };
 
   const handleInputChange = (e) => {

@@ -36,7 +36,7 @@ const Header = () => {
           <motion.img
             src="/Logo/3.png"
             alt="Logo"
-            className="h-10 drop-shadow-lg"
+            className="h-16 drop-shadow-lg"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
