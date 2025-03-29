@@ -11,7 +11,7 @@ import ChatMessages from "./ChatMessages";
 import ControlBar from "./ControlBar";
 import ControlBarButton from "./ControlBarButton";
 import EscNotification from "./EscNotification";
-import Sidebar from "./SideBar";
+import Sidebar from "./Sidebar.jsx";
 import ShareLinkPopup from "./ShareLinkPopup";
 import LeaveRoomModal from "./LeaveRoomScreen";
 
