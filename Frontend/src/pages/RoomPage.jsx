@@ -104,7 +104,7 @@ const RoomPage = () => {
       socketInitialized.current = true;
       //validtion check for roomId and user
       dispatch(setLoading(true));
-      const url = `https://codelab-sq6v.onrender.com/room/${roomId}`;
+      const url = `http://localhost:5000/room/${roomId}`;
       axios
         .get(url, {
           params: { user: userData }, // Send userId for backend validation
@@ -154,7 +154,7 @@ const RoomPage = () => {
               reconnectionAttempts: 5,
             };
     
-            socketRef.current = io("https://codelab-sq6v.onrender.com", socketOptions);
+            socketRef.current = io(`http://localhost:5000`, socketOptions);
            
 
             // Handle connection errors
