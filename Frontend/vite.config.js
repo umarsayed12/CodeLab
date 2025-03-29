@@ -7,7 +7,7 @@ export default defineConfig({
   server:{
     proxy:{
         "/api": {
-          target: import.meta.env.VITE_API_URL, // ✅ Ensure this is correct
+          target: "https://codelab-sq6v.onrender.com", // ✅ Ensure this is correct
           changeOrigin: true,
           secure: false,
           ws:true,
