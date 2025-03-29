@@ -6,10 +6,6 @@
   command = "npm run build"
   # Directory to publish (Vite builds to 'dist' by default)
   publish = "dist"
-  # Environment variables (optional)
-  environment = { 
-    NODE_VERSION = "18.17.1"
-  }
 
 # Redirect all routes to index.html for SPA
 [[redirects]]
