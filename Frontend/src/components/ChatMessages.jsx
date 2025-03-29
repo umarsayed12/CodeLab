@@ -41,7 +41,7 @@ const ChatMessages = ({ socket, messages, setMessages, darkMode, roomId }) => {
       return (
         <div className={containerClasses}>
           <img 
-            src={`http://localhost:5000/${sender.profileImage}`}
+            src={`https://codelab-sq6v.onrender.com/${sender.profileImage}`}
             alt={sender.fullname}
             className={imageClasses}
           />

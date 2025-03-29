@@ -52,7 +52,7 @@ const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
    dispatch(setLoading(true));
-    const url = `http://localhost:5000/room/create-room`;
+    const url = `https://codelab-sq6v.onrender.com/room/create-room`;
     const FormData = {
       meetingName: meetingName,
       hostName: hostName,

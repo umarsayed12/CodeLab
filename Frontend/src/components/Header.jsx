@@ -72,7 +72,7 @@ const Header = () => {
           {/* Show profile image if authenticated */}
           {isAuthenticated && (
             <motion.img
-              src={user?.profileImage ? `http://localhost:5000/${user.profileImage}` : "/images/man.png"}
+              src={user?.profileImage ? `https://codelab-sq6v.onrender.com/${user.profileImage}` : "/images/man.png"}
               alt="Profile"
               className="w-10 h-10 rounded-full cursor-pointer shadow-lg border-2 border-cyan-400 object-cover"
               whileHover={{ scale: 1.1 }}
@@ -147,7 +147,7 @@ const Header = () => {
             {/* Show profile image in mobile menu if authenticated */}
             {isAuthenticated && (
               <motion.img
-                src={user?.profileImage ? `http://localhost:5000/${user.profileImage}` : "/images/man.png"}
+                src={user?.profileImage ? `https://codelab-sq6v.onrender.com/${user.profileImage}` : "/images/man.png"}
                 alt="Profile"
                 className="w-12 h-12 rounded-full cursor-pointer shadow-lg border-2 border-cyan-400 object-cover"
                 whileHover={{ scale: 1.1 }}
