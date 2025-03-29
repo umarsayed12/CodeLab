@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 
-
 /* Animation for the marquee text */
 .animate-marquee {
     animation: marquee 15s linear infinite;
