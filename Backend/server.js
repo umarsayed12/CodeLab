@@ -21,10 +21,10 @@ const io = initializeSocket(server);
 
 //connect MongoDB
 connectMongoDB(process.env.MONGO_URL).then((result) => {
-    // console.log("DataBase Connected SuccessFully!");
+    console.log("DataBase Connected SuccessFully!");
 })
 .catch((err) => {
-    // console.log("Database Can't Connect Error:", err);
+    console.log("Database Can't Connect Error:", err);
 });
 
 

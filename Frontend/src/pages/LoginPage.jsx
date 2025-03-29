@@ -50,7 +50,7 @@ const LoginPage = () => {
     e.preventDefault();
     setIsLoading(true);
     const user = { email, password };
-    const url = "https://codelab-sq6v.onrender.com/user/login";
+    const url = `https://codelab-sq6v.onrender.com/user/login`;
 
     axios
       .post(url, user, { withCredentials: true })

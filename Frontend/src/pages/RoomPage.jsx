@@ -154,7 +154,7 @@ const RoomPage = () => {
               reconnectionAttempts: 5,
             };
     
-            socketRef.current = io("https://codelab-sq6v.onrender.com", socketOptions);
+            socketRef.current = io(`https://codelab-sq6v.onrender.com`, socketOptions);
            
 
             // Handle connection errors

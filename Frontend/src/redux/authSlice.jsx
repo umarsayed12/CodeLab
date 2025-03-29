@@ -34,7 +34,7 @@ export default authSlice.reducer;
 export const checkAuth = () => async (dispatch) => {
   dispatch(setLoading(true)); // Start loading
   try {
-    const response = await axios.get("https://codelab-sq6v.onrender.com/user/current-user", {
+    const response = await axios.get(`https://codelab-sq6v.onrender.com/user/current-user`, {
       withCredentials: true,
     });
 

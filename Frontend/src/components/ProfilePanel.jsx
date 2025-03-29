@@ -23,7 +23,7 @@ const ProfilePanel = ({ panelOpen, onClose }) => {
   const handleLogout = () => {
     dispatch(setLoading(true));
     axios
-      .post("https://codelab-sq6v.onrender.com/user/logout" , {} , { withCredentials: true }) //axios.post(url, data, config)
+      .post(`https://codelab-sq6v.onrender.com/user/logout` , {} , { withCredentials: true }) //axios.post(url, data, config)
       .then((response) => {
         if (!response.data.success) {
           showErrorToast(response.data.message);
@@ -79,7 +79,7 @@ const ProfilePanel = ({ panelOpen, onClose }) => {
         {/* Profile Info */}
         <div className={`flex flex-col items-center py-6 space-y-2 border-b ${darkMode ? "border-gray-900" : "border-gray-200"}`}>
           <motion.img
-            src={user?.profileImage ? `https://codelab-sq6v.onrender.com${user.profileImage}` : "/images/man.png"}
+            src={user?.profileImage ? `https://codelab-sq6v.onrender.com/${user.profileImage}` : "/images/man.png"}
             alt="User Profile"
             className="h-20 w-20 rounded-full border-2 border-cyan-500 shadow-md"
             whileHover={{ scale: 1.05 }}
