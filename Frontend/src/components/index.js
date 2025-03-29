@@ -11,9 +11,25 @@ import ChatMessages from "./ChatMessages";
 import ControlBar from "./ControlBar";
 import ControlBarButton from "./ControlBarButton";
 import EscNotification from "./EscNotification";
-import Sidebar from "./sideBar";
+import Sidebar from "./SideBar";
 import ShareLinkPopup from "./ShareLinkPopup";
 import LeaveRoomModal from "./LeaveRoomScreen";
 
-export { CodeEditor, Footer, Header, ParticipantsList, ProfilePanel, HomeContent, ThemeButton , LoadingScreen, AccessDeniedScreen , 
-    ChatMessages , ControlBar , ControlBarButton, EscNotification , Sidebar , ShareLinkPopup , LeaveRoomModal };
+export {
+  CodeEditor,
+  Footer,
+  Header,
+  ParticipantsList,
+  ProfilePanel,
+  HomeContent,
+  ThemeButton,
+  LoadingScreen,
+  AccessDeniedScreen,
+  ChatMessages,
+  ControlBar,
+  ControlBarButton,
+  EscNotification,
+  Sidebar,
+  ShareLinkPopup,
+  LeaveRoomModal,
+};
